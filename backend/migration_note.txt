@@ -1,0 +1,7 @@
+from sqlalchemy import Column, Integer
+# In a real app we'd use alembic, but for MVP/SQLite/local without extensive setup, 
+# sometimes it's easier to just manually add if using create_all. 
+# But create_all won't update existing tables.
+# I will instruct the user to simpler delete the DB file if they want a clean slate, 
+# OR I will add the column dynamically if I can.
+pass

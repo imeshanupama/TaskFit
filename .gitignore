@@ -1,0 +1,21 @@
+# System
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+.env
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.expo/
+web-build/
+
+# IDE
+.idea/
+.vscode/
