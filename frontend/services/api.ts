@@ -49,3 +49,12 @@ export const submitAssessments = async (jobId: string, assessments: AssessmentIt
     const response = await api.post('/assessments/', { job_id: jobId, assessments });
     return response.data;
 };
+
+export const generateCoverLetter = async (jobId: string, strengths: string[], gaps: string[]): Promise<string> => {
+    const response = await api.post('/generator/cover-letter', {
+        job_id: jobId,
+        strengths,
+        gaps
+    });
+    return response.data.cover_letter;
+};

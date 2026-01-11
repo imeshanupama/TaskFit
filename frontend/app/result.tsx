@@ -94,15 +94,43 @@ export default function ResultScreen() {
             {result.gaps.length > 0 && (
                 <View className="mb-8">
                     <Text className="text-xl font-bold text-slate-800 mb-4">⚠️ Skill Gaps</Text>
-                    {result.gaps.map((item, index) => (
-                        <View key={index} className="flex-row mb-3 bg-red-50 p-4 rounded-xl border border-red-100">
-                            <Text className="text-slate-800 flex-1 font-medium">{item}</Text>
+                    {result.gaps.map((g, i) => (
+                        <View key={i} className="flex-row items-center mb-1">
+                            <Text className="text-red-500 mr-2">⚠</Text>
+                            <Text className="text-slate-600">{g}</Text>
                         </View>
                     ))}
                 </View>
             )}
 
-            <Button title="Analyze Another Job" onPress={handleRestart} variant="secondary" className="mb-10" />
+            {/* Cover Letter Section */}
+            <View className="mb-8">
+                <View className="bg-indigo-50 p-4 rounded-2xl border border-indigo-100">
+                    <Text className="text-indigo-900 font-bold text-lg mb-2">Want to apply?</Text>
+                    <Text className="text-indigo-700 text-sm mb-4">
+                        Generate a tailored cover letter that highlights your strengths and addresses your gaps positively.
+                    </Text>
+                    <Button
+                        title="Draft Cover Letter"
+                        onPress={() => {
+                            // Navigate to cover letter screen with params
+                            /* @ts-ignore */
+                            router.push({
+                                pathname: "/cover-letter",
+                                params: {
+                                    jobId: jobId,
+                                    strengths: JSON.stringify(result.strengths),
+                                    gaps: JSON.stringify(result.gaps)
+                                }
+                            });
+                        }}
+                        variant="primary"
+                        className="bg-indigo-600"
+                    />
+                </View>
+            </View>
+
+            <Button title="Try Another Job" onPress={handleRestart} variant="outline" />
         </ScrollView>
     )
 }
