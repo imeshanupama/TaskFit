@@ -34,3 +34,11 @@ class FitResultResponse(BaseModel):
     category: str
     strengths: List[str]
     gaps: List[str]
+
+class CoverLetterRequest(BaseModel):
+    job_id: str
+    strengths: List[str]
+    gaps: List[str]
+
+class CoverLetterResponse(BaseModel):
+    cover_letter: str

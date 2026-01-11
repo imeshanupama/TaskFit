@@ -92,3 +92,56 @@ def extract_tasks_from_description(description: str, cv_text: str = None) -> lis
     except Exception as e:
         print(f"Error calling LLM: {e}")
         return [TaskCreate(**t) for t in MOCK_TASKS]
+
+def generate_cover_letter(job_description: str, strengths: list[str], gaps: list[str]) -> str:
+    api_key = os.getenv("OPENAI_API_KEY")
+    
+    if not api_key:
+        return """[MOCK COVER LETTER]
+Dear Hiring Manager,
+
+I am writing to express my strong interest in this position. Based on the job description, my background in {strengths} aligns perfectly with your needs.
+
+While I have less experience with {gaps}, I am a fast learner and eager to upskill in these areas.
+
+Sincerely,
+Candidate"""
+
+    openai.api_key = api_key
+    
+    system_prompt = """
+    You are an expert career coach and professional copywriter.
+    Write a compelling, personalized cover letter for a candidate applying to the provided Job Description.
+    
+    Guidelines:
+    1. Hook the reader immediately.
+    2. Explicitly mention the candidate's confirmed STRENGTHS as proof of value.
+    3. Briefly acknowledge the GAPS but frame them positively (e.g., "eager to expand my expertise in...").
+    4. Keep it concise (under 300 words).
+    5. return ONLY the body of the email/letter. No placeholders like [Your Name] unless necessary.
+    """
+
+    user_content = f"""
+    JOB DESCRIPTION:
+    {job_description[:2000]}...
+
+    CANDIDATE STRENGTHS (Verified):
+    {", ".join(strengths)}
+
+    CANDIDATE GAPS (To learn):
+    {", ".join(gaps)}
+    """
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content}
+            ],
+            temperature=0.7
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print(f"Error calling LLM for Cover Letter: {e}")
+        return "Error generating cover letter."
